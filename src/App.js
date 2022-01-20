@@ -4,32 +4,47 @@ import styled from "styled-components";
 import "./styles.css";
 
 export default function App() {
+  const [toggle, setToggle] = React.useState(false);
   const styles = useSpring({
     from: {
-      rotate: "0deg"
+      width: "0%",
+      backgroundColor: "#aaa"
     },
-    to: {
-      rotate: "360deg"
-    },
-    loop: true,
-    config: { duration: 1000 }
+    to: async (next) => {
+      if (toggle) {
+        await next({
+          width: "100%"
+        });
+        await next({
+          backgroundColor: "skyblue"
+        });
+      } else {
+        await next({
+          backgroundColor: "#aaa"
+        });
+        await next({
+          width: "0%"
+        });
+      }
+    }
   });
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: "turquoise"
-      }}
-    >
-      <Loader style={styles} />
+    <div className="App">
+      <Container onClick={() => setToggle(!toggle)}>
+        <Meter style={styles} />
+      </Container>
     </div>
   );
 }
 
-const Loader = styled(a.div)({
-  width: 50,
-  height: 50,
-  borderRadius: "50%",
-  border: " 5px solid #fff",
-  borderTopColor: "transparent"
+const Container = styled("div")({
+  width: 400,
+  height: 70,
+  backgroundColor: "#ccc"
+});
+
+const Meter = styled(a.div)({
+  width: 400,
+  height: 70,
+  backgroundColor: "skyblue"
 });
